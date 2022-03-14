@@ -1,4 +1,4 @@
-# \Team FreElvLau\
+# Team FreElvLau
 
 **Group members:**
 - Freja Katharina Jensen, qfv280
