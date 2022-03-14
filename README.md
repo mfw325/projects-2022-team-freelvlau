@@ -1,9 +1,9 @@
-# \[Group name\]
+# \Team FreElvLau\
 
 **Group members:**
-- A
-- B
-- C
+- Freja Katharina Jensen, qfv280
+- Elvira Marie Sadowsky, zvm485
+- Laura Jaida Clausen, pqx792
 
 This repository contains  
 1. Inaugural project. 
