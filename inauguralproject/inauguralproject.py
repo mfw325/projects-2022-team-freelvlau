@@ -39,3 +39,20 @@ def optimal_pi(q, x, y, p, V0):
     # solving V=V0    
     res = optimize.root(obj, pi_guess, method='hybr')
     return  res
+
+# defining monte carlo function
+
+# setting seed number
+np.random.seed(123)
+
+# setting parameters
+N = 10000
+alpha = 2
+beta = 7
+
+def agent_value(x, y, p, gamma, pi):
+    return u_func((y - (1 - gamma)*x - pi), theta)
+
+def monte_carlo(y, p, gamma, pi, N):
+    xs = np.random.beta(alpha, beta, N) # draws N number of xs from a beta distribution
+    return np.mean(agent_value(xs, y, p, gamma, pi)) # return average
