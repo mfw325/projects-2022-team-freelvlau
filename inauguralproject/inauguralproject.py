@@ -1,35 +1,41 @@
-clear
-
 import numpy as np
 from scipy import optimize
 
-# a. define given parameters and functions
-
-# a.i define parameters
+# defining given parameters
 y = 1
 p = 0.2
-vartheta = -2
+theta = -2
 
-# a.ii generate x values
-N=100 #number of elements
-x_min=0.01 #minimum value
-x_max=0.9 #maximum value
+# defining utility function
+def u_func(z, theta):
+    return (z ** (1 + theta))/(1 + theta)
 
-x_values=np.linspace(x_min, x_max, N)
+# defining value functions
 
-# a.iii define utility function
-def utility_function(z,vartheta):
-    u = (z ** (1 + vartheta))/(1 + vartheta)
-    return u
+def uninsured_value(x, y, p):
+    return p*u_func((y-x), theta) + (1 - p)*u_func(y, theta)
 
-# b. define value function
+def insured_value(x, y, p, q):
+    return p*u_func((y - x + q - p*q), theta)+(1 - p)*u_func((y - p*q), theta)
+    
+# defining optimizer
+def optimal(x, y, p):
+    res = optimize.minimize_scalar(lambda q: -insured_value(x, y, p, q), method = 'bounded', bounds = (0,x))
+    return res
 
-def insured_value(q, x, y, p):
-    V = p*utility_function((y-x+q-p*q),vartheta)+(1-p)*utility_function((y-p*q),vartheta)
-    return -V
+#defining value function with fixed pi
 
-obj = lambda q: insured_value(q, x, y, p)
+def value_pi(pi, q, x, y, p):
+     return p*u_func((y - x + q - pi), theta)+(1 - p)*u_func((y - pi), theta)
 
-for x in x_values:
-    q_max = optimize.minimize_scalar(obj, method = 'brent', bounds = (0,x))
-    print(q_max.res)
+# we guess the solution of pi
+
+pi_guess = 0.01
+
+def optimal_pi(q, x, y, p, V0):
+    # objective function
+    def obj(pi):
+        return value_pi(pi, q, x, y, p) - V0
+    # solving V=V0    
+    res = optimize.root(obj, pi_guess, method='hybr')
+    return  res
