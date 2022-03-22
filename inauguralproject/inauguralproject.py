@@ -56,3 +56,14 @@ def agent_value(x, y, p, gamma, pi):
 def monte_carlo(y, p, gamma, pi, N):
     xs = np.random.beta(alpha, beta, N) # draws N number of xs from a beta distribution
     return np.mean(agent_value(xs, y, p, gamma, pi)) # return average
+
+# guess the solution
+pi_guess_c = 0.01
+
+def optimal_pi_c(y, p, gamma, pi, N, U0):
+    # objective function
+    def U(pi):
+        return monte_carlo(y, p, gamma, pi, N) - U0
+    # solving U=U0
+    sol = optimize.root(U, pi_guess_c, method = 'broyden1')
+    return sol
